@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "7a16b51d-2131-43ec-86c1-860fc41c9d7f",
+		"name": "게시글 & 댓글 API (자동화 TEST)",
+		"description": "Laravel 12 + PHP 8.3 게시글/댓글 API\n\n### 테스트 계정\n\n- [test@example.com](https://mailto:test@example.com) / 1234qwer!\n    \n- [testUser1@example.com](https://mailto:testUser1@example.com) / 1234qwer!\n    \n\n기본 URL: {{BASE_URL}}\n\n요청 값이 파싱 가능하도록 Content-Type을 알맞게 입력해야함\n\nraw(json) 요청시\n\nContent-Type: application/json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42810524"
+	},
+	"item": [
+		{
+			"name": "토큰 얻기",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 로그인 후 TOKEN 변수 세팅",
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set('TOKEN', jsonData.token);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{TEST_USER_EMAIL}}\",\n    \"password\": \"{{TEST_USER_PASSWORD}}\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/token",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "게시글 생성",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 생성된 게시글 ID를 POST_ID 변수로 저장",
+							"if (pm.response.code === 201) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set('POST_ID', jsonData.data.id);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"첫 게시글\",\n    \"contents\": \"내용입니다.\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/posts",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "댓글 생성",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 생성된 댓글 ID를 COMMENT_ID 변수로 저장",
+							"if (pm.response.code === 201) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set('COMMENT_ID', jsonData.data.id);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contents\": \"댓글 내용\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/posts/{{POST_ID}}/comments",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"posts",
+						"{{POST_ID}}",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "게시글 목록",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "page",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/posts",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"posts"
+					]
+				},
+				"description": "게시글 목록 조회"
+			},
+			"response": []
+		},
+		{
+			"name": "게시글 상세 조회",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/api/posts/{{POST_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "댓글 수정",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contents\": \"수정된 댓글\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/comments/{{COMMENT_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						"{{COMMENT_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "게시글 삭제",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/api/posts/{{POST_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"posts",
+						"{{POST_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "댓글 삭제",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BASE_URL}}/api/comments/{{COMMENT_ID}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"comments",
+						"{{COMMENT_ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://fv-test.kpearl.net:8080",
+			"type": "string"
+		},
+		{
+			"key": "TEST_USER_EMAIL",
+			"value": "test@example.com",
+			"type": "string"
+		},
+		{
+			"key": "TEST_USER_PASSWORD",
+			"value": "1234qwer!",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "POST_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "COMMENT_ID",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
