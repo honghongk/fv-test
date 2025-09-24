@@ -42,6 +42,8 @@ composer install;
 npm install
 php artisan migrate;
 php artisan db:seed;
+# 완전 초기화 + 시더 실행
+# php artisan migrate:fresh --seed
 npm run build;
 
 # 업데이트 배포
@@ -54,3 +56,17 @@ php artisan migrate;
 npm run build;
 
 ```
+
+
+### 개발 서버 웹페이지 정보
+
+**개발 서버 URL:** [http://fv-test.kpearl.net:8080/](http://fv-test.kpearl.net:8080/)
+
+---
+
+## 테스트 계정
+
+| 이름 / 용도 | 이메일 | 비밀번호 |
+|-------------|--------|----------|
+| 테스트 계정   | test@example.com | 1234qwer! |
+| 테스트 유저 | testUser1@example.com | 1234qwer! |
