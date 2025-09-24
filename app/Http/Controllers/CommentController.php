@@ -16,22 +16,36 @@ class CommentController extends Controller
     {
         $post = Post::findOrFail($postId);
 
-        // 로그인 사용자만 작성 가능
         $user = Auth::user();
-        if ( ! $user )
+        if (! $user)
+        {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => '로그인이 필요합니다.'
+                ],403);
+            }
             abort(403, '로그인이 필요합니다.');
+        }
 
-        // 유효성 검사
         $data = $request->validate([
             'contents' => 'required|string',
         ]);
 
-        // 댓글 생성
         $comment = new Comment();
         $comment->post_id  = $post->id;
         $comment->user_id  = $user->id;
         $comment->contents = $data['contents'];
         $comment->save();
+
+        if ($request->wantsJson())
+        {
+            return response()->json([
+                'success' => true,
+                'message' => '댓글이 작성되었습니다.',
+                'data'    => $comment
+            ], 201);
+        }
 
         return redirect()
             ->route('posts.show', $post->id)
@@ -41,14 +55,9 @@ class CommentController extends Controller
     /**
      * 댓글 수정 폼
      */
-    public function edit(int $id)
+    public function edit(Request $request, int $id)
     {
         $comment = Comment::findOrFail($id);
-
-        // 본인만 수정 가능
-        if ($comment->user_id !== Auth::id())
-            abort(403, '권한이 없습니다.');
-
         return view('comments.edit', compact('comment'));
     }
 
@@ -59,16 +68,32 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($id);
 
-        // 본인만 수정 가능
-        if ($comment->user_id !== Auth::id())
+        // 이미 삭제되었거나 작성자가 아니면
+        if ($comment?->user_id !== Auth::id())
+        {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => '권한이 없습니다.'
+                ],403);
+            }
             abort(403, '권한이 없습니다.');
+        }
 
-        // 유효성 검사
         $data = $request->validate([
             'contents' => 'required|string',
         ]);
 
         $comment->update($data);
+
+        if ($request->wantsJson())
+        {
+            return response()->json([
+                'success' => true,
+                'message' => '댓글이 수정되었습니다.',
+                'data' => $comment
+            ]);
+        }
 
         return redirect()
             ->route('posts.show', $comment->post_id)
@@ -78,16 +103,28 @@ class CommentController extends Controller
     /**
      * 댓글 삭제
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, int $id)
     {
         $comment = Comment::findOrFail($id);
 
-        // 본인만 삭제 가능
-        if ($comment->user_id !== Auth::id()) {
+        // 이미 삭제되었거나 작성자가 아니면
+        if ($comment?->user_id !== Auth::id())
+        {
+            if ($request->wantsJson()) {
+                return response()->json(['success'=>false,'message'=>'권한이 없습니다.'],403);
+            }
             abort(403, '권한이 없습니다.');
         }
 
         $comment->delete();
+
+        if ($request->wantsJson())
+        {
+            return response()->json([
+                'success' => true,
+                'message' => '댓글이 삭제되었습니다.'
+            ]);
+        }
 
         return redirect()
             ->route('posts.show', $comment->post_id)
