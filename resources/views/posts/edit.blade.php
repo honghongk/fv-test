@@ -30,7 +30,7 @@
 
         <div style="margin-bottom: 1rem;">
             <button type="submit">수정</button>
-            <a href="{{ route('posts.index') }}">취소</a>
+            <a href="{{ route('posts.list') }}">취소</a>
         </div>
     </form>
 </div>

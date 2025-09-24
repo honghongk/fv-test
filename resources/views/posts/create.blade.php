@@ -30,7 +30,7 @@
         <div style="margin-bottom: 1rem;">
             <input type="hidden" name="user_id" value="{{ Auth::id() }}">
             <button type="submit">작성</button>
-            <a href="{{ route('posts.index') }}">취소</a>
+            <a href="{{ route('posts.list') }}">취소</a>
         </div>
     </form>
 </div>

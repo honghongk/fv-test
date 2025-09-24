@@ -55,7 +55,7 @@ class PostController extends Controller
         Post::create($data);
 
         return redirect()
-            ->route('posts.index')
+            ->route('posts.list')
             ->with('success', '게시글이 생성되었습니다.');
     }
 
@@ -96,7 +96,7 @@ class PostController extends Controller
         $post->update($data);
 
         return redirect()
-            ->route('posts.index')
+            ->route('posts.list')
             ->with('success', '게시글이 수정되었습니다.');
     }
 
@@ -116,7 +116,7 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()
-            ->route('posts.index')
+            ->route('posts.list')
             ->with('success', '게시글이 삭제되었습니다.');
     }
 }

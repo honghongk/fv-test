@@ -12,7 +12,7 @@
     </div>
 
     <div style="margin-top: 1rem;">
-        <a href="{{ route('posts.index') }}">목록으로</a>
+        <a href="{{ route('posts.list') }}">목록으로</a>
         @if ($post->user_id === Auth::id())
             <a href="{{ route('posts.edit', $post->id) }}">수정</a>
         @endif
