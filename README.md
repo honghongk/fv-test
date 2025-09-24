@@ -39,6 +39,7 @@ chown -R www-data storage;
 chown -R www-data bootstrap/cache;
 rm composer.lock;
 composer install;
+npm install
 php artisan migrate;
 php artisan db:seed;
 npm run build;
@@ -46,6 +47,7 @@ npm run build;
 # 업데이트 배포
 git pull;
 composer install;
+npm install
 php artisan migrate;
 # 필요시
 # php artisan db:seed;
