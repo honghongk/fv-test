@@ -17,9 +17,12 @@ Laravel Framework 12.31.1.
 
 
 # DB에서 유저, 데이터베이스 세팅
-create user fvtest@'127.0.0.1' identified by 'fastviewtest1!';
-grant all privileges on fvtest.* to fvtest@'127.0.0.1';
-flush privileges;
+# 쉘에서 실행
+mysql -e "create database fvtest;";
+mysql -e "create user fvtest@'127.0.0.1' identified by 'fastviewtest1!'";
+mysql -e "grant all privileges on fvtest.* to fvtest@'127.0.0.1'";
+mysql -e "flush privileges";
+
 
 
 # 폴더 권한 설정
