@@ -87,7 +87,8 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        if ($post->user_id !== Auth::id())
+        // 이미 삭제되었거나 작성자가 아니면
+        if ($post?->user_id !== Auth::id())
         {
             if ($request->wantsJson()) {
                 return response()->json(['success'=>false, 'message'=>'권한이 없습니다.'], 403);
@@ -113,7 +114,8 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        if ($post->user_id !== Auth::id())
+        // 이미 삭제되었거나 작성자가 아니면
+        if ($post?->user_id !== Auth::id())
         {
             if ($request->wantsJson()) {
                 return response()->json(['success'=>false, 'message'=>'권한이 없습니다.'], 403);
