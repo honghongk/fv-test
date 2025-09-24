@@ -31,7 +31,7 @@
                             {{ $post->title }}
                         </a>
                     </td>
-                    <td>{{ $post->user_id }}</td>
+                    <td>{{ $post->user->name }}</td>
                     <td>{{ $post->created_at }}</td>
                     <td>
                         @if ($post->user_id === Auth::id())
