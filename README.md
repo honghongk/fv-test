@@ -11,7 +11,9 @@ Laravel Framework 12.31.1.
 ### 세팅
 ```bash
 # 프로젝트 폴더 생성
+# 20250924 현재 12버전 설치됨
 # composer create-project laravel/laravel fv-test;
+# composer create-project laravel/laravel=12.31.1 fv-test --prefer-dist;
 
 
 # DB에서 유저, 데이터베이스 세팅
