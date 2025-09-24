@@ -4,7 +4,7 @@
 <div class="container">
     <h1>{{ $post->title }}</h1>
 
-    <p><strong>작성자:</strong> {{ $post->user_id }}</p>
+    <p><strong>작성자:</strong> {{ $post->user->name }}</p>
     <p><strong>작성일:</strong> {{ $post->created_at }}</p>
 
     <div style="margin-top: 1rem;">
