@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    @vite('resources/css/app.css')
     <!-- 기본 CSS -->
     <style>
         body {
@@ -80,6 +81,9 @@
         @yield('content')
     </main>
 
+
+    @vite('resources/js/app.js')
+    
     <!-- 기본 JS -->
     <script>
         // 필요 시 여기에 JS 코드 추가
