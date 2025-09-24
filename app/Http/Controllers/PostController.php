@@ -13,7 +13,7 @@ class PostController extends Controller
      */
     public function list()
     {
-        $posts = Post::latest()->paginate(10);
+        $posts = Post::orderBy('id', 'desc')->paginate(10);
 
         return view('posts.list', compact('posts'));
     }
