@@ -48,6 +48,9 @@ php artisan db:seed;
 # 완전 초기화 + 시더 실행
 # php artisan migrate:fresh --seed
 npm run build;
+```
+
+```bash
 
 # 업데이트 배포
 git pull;
