@@ -73,9 +73,17 @@
         form div {
             margin-bottom: 1rem;
         }
+
+        header{
+            padding: 0.5em;
+        }
     </style>
 </head>
 <body>
+
+    <header>
+        <a href="/logout">로그아웃</a>
+    </header>
 
     <main>
         @yield('content')
@@ -83,7 +91,7 @@
 
 
     @vite('resources/js/app.js')
-    
+
     <!-- 기본 JS -->
     <script>
         // 필요 시 여기에 JS 코드 추가
