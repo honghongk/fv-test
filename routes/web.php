@@ -43,4 +43,10 @@ Route::middleware('auth')->group(function () {
 
     // 삭제처리
     Route::delete('/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    // 댓글
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
